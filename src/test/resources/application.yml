@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:mysql://localhost:3306/jpa_basic?useUnicode=true&characterEncoding=UTF-8&TimezoneUTC&useSSL=false
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        # System.out에 출력(운영 환경에서는 사용 지양)
+        #        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+# hibernate가 생성하는 sql이 debug시 모두 보임(System.out이 아닌 logger에 찍힘)
+logging:
+  level:
+    org.hibernate.SQL: debug
+    # binding parameter value를 로그에 표시해 줌
+    org.hibernate.type: trace

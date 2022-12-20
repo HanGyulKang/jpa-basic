@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/jpa_basic?useUnicode=true&characterEncoding=UTF-8&TimezoneUTC&useSSL=false
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        # System.out? ??(?? ????? ?? ??)
+        #        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+# hibernate? ???? sql? debug? ?? ??(System.out? ?? logger? ??)
+logging:
+  level:
+    org.hibernate.SQL: debug
+    # binding parameter value? ??? ??? ?
+    org.hibernate.type: trace

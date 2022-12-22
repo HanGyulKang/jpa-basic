@@ -2,7 +2,7 @@ spring:
   profiles:
     active: test
   datasource:
-    url: jdbc:mysql://localhost:3306/jpa_basic?useUnicode=true&characterEncoding=UTF-8&TimezoneUTC&useSSL=false
+    url: jdbc:mysql://localhost:3306/jpa_basic
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver

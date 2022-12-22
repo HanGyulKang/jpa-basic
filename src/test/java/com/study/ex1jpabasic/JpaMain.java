@@ -12,6 +12,8 @@ import org.springframework.test.annotation.Rollback;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
@@ -74,24 +76,16 @@ public class JpaMain {
     }
 
     @Test
-    @Rollback
-    public void main_old() {
-//        EntityTransaction tx = em.getTransaction();
-//        tx.begin();
-//
-//        try {
-//            Member member = Member.builder()
-//                    .id(3L)
-//                    .name("HelloC")
-//                    .build();
-//
-//            em.persist(member);
-//            tx.commit();
-//        }catch (Exception e) {
-//            log.error("Member Insert Error : {}", e.getMessage());
-//            tx.rollback();
-//        }finally {
-//            em.close();
-//        }
+    public void test_jpql() {
+        // JPQL은 엔티티를 대상으로 쿼리
+        // SQL은 데이터베이스 테이블을 대상으로 쿼리
+        List<Member> resultList = em.createQuery("select m from Member as m ", Member.class)
+                .setFirstResult(5)
+                .setMaxResults(8)
+                .getResultList();
+
+        for(Member m : resultList) {
+            System.out.println(m.toString());
+        }
     }
 }

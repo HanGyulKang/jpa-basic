@@ -43,12 +43,16 @@ public class JpaMain {
     @Test
     @Rollback
     public void main() {
+        // 비영속
         Member member = Member.builder()
                 .id(2L)
                 .name("HelloB")
                 .build();
 
+        // 영속 (아직 데이터베이스에 저장은 되지 않은 상태)
+        System.out.println("==== BEFORE ====");
         em.persist(member);
+        System.out.println("==== AFTER ====");
         em.close();
     }
 

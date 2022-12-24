@@ -160,6 +160,13 @@ public class JpaMain {
         Member member = em.find(Member.class, 14L);
         member.setName(name);
 
+        // 이름이 변경되었다면 Update 아니면 그대로
+        // 이 소스가 무쓸모임
+        // 이렇게 하더라도 값이 바뀐이상 트랜잭션이 커밋되는 순간 변경사항을 디비에 반영 함
+        if(member.getName().equals(name)) {
+            em.persist(member);
+        }
+
         System.out.println("\n이름을 바꿈");
         System.out.println(member.toString());
         System.out.println("\n");

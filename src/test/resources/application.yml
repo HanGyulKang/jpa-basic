@@ -16,6 +16,11 @@ spring:
         #        show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        # batch size만큼 쓰기지연 저장소에 쿼리를 보관했다가 한 번에 보냄
+        # db connection 1개로 여러 개의 쿼리 처리
+        # MyBatis같은걸로 구현하기가 매우 어려움
+        jdbc:
+          batch_size: 10
 
 # hibernate가 생성하는 sql이 debug시 모두 보임(System.out이 아닌 logger에 찍힘)
 logging:

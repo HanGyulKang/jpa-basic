@@ -11,13 +11,11 @@ import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-@Transactional
 public class JpaMain {
 
     // **** JPA 의 모든 데이터 변경은 트랜잭션 안에서 실행해야 한다.
@@ -38,6 +36,8 @@ public class JpaMain {
         em.persist(member2);
         em.persist(member3);
         em.persist(member4);
+
+        em.flush();
     }
 
     @Test
@@ -129,7 +129,54 @@ public class JpaMain {
     }
 
     @Test
+    @Transactional
     public void test_transaction() {
-        
+        try {
+            Member member1 = new Member(150L, "A");
+            Member member2 = new Member(160L, "B");
+
+            em.persist(member1);
+            em.persist(member2);
+
+            System.out.println("======== persist에서는 아직 Insert 쿼리가 실행되지 않았다 ========");
+
+            em.flush();
+        } catch (Exception e) {
+            em.close();
+            log.error(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+
+    @Test
+    @Transactional
+    public void test_dirty_checking() {
+        // dirty checking : 변경 감지
+
+        String name = "ZZZZZ";
+
+        // 조회 함
+        Member member = em.find(Member.class, 14L);
+        member.setName(name);
+
+        System.out.println("\n이름을 바꿈");
+        System.out.println(member.toString());
+        System.out.println("\n");
+        // em.persist를 하지 않아도 조회가 됨
+        // JPA의 목표는 Java Collection 다루듯 객체를 다루는 것임
+        // Java List나 Map같은 데이터에서 값을 꺼내고 변경했다고 다시 집어넣지 않음 ㅋㅋ
+
+        // db로 쓰기 지연 SQL 저장소에 있는 update 쿼리를 보냄
+        em.flush();
+
+        Member member1 = em.find(Member.class, 14L);
+        // 이름 바뀜
+        assertThat(member1)
+                .extracting("name")
+                .isEqualTo(name);
+
+        // 객체 동일함
+        assertThat(member).isEqualTo(member1);
     }
 }

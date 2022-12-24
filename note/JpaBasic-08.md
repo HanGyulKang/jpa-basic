@@ -60,3 +60,40 @@ __memberB__ : persist 시 쓰기 지연 SQL 저장소에 쿼리를 저장 함 + 
 
 __transaction.commit(); 시 쓰기 지연 SQL 저장소에 있는 쿼리가 데이터베이스로 날아 감__
 
+---
+
+### 엔티티 변경
+* __dirty checking__ : 변경 감지
+```java
+String name = "ZZZZZ";
+
+// 조회 함(영속)
+Member member = em.find(Member.class, 14L);
+member.setName(name);
+
+System.out.println("이름을 바꿈 : " + member.toString());
+
+// db로 쓰기 지연 SQL 저장소에 있는 update 쿼리를 보냄
+em.flush();
+
+Member member1 = em.find(Member.class, 14L);
+// 이름 바뀜
+assertThat(member1)
+        .extracting("name")
+        .isEqualTo(name);
+
+// 객체 동일함
+assertThat(member).isEqualTo(member1);
+```
+* 변경 감지 시 __em.persist__ 를 하지 않아도 데이터 수정이 됨.
+* __JPA__ 의 목표는 __Java Collection 다루듯 객체를 다루는 것__ 임<br>Java List나 Map같은 데이터에서 값을 꺼내고 변경했다고 다시 집어넣지 않음
+---
+### 엔티티 삭제
+```java
+Member member = em.find(Member.class, "memberA");
+
+// 엔티티 삭제
+em.remove(member); 
+```
+* 물론 트랜잭션 커밋 시 Delete 쿼리가 실행 됨
+---

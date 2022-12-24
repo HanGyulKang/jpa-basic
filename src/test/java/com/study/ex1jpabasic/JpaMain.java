@@ -91,5 +91,45 @@ public class JpaMain {
         for(Member m : resultList) {
             System.out.println(m.toString());
         }
+
+        em.close();
+    }
+
+    @Test
+    @Transactional
+    public void test_cache_01() {
+        Member member = Member.builder()
+                .id(101L)
+                .name("HelloJPA")
+                .build();
+
+        System.out.println("===== BEFORE =====");
+        em.persist(member);
+        System.out.println("===== AFTER =====");
+
+        // 위에서 1차 캐시에 저장한 데이터를 조회하는 것이기 떄문에 1차 캐시에서 조회 함
+        Member findMember = em.find(Member.class, 101L);
+
+        System.out.println("findMember.id = " + findMember.getId());
+        System.out.println("findMember.name = " + findMember.getName());
+
+        em.close();
+    }
+
+    @Test
+    @Transactional
+    public void test_cache_02() {
+        Member member1 = em.find(Member.class, 1L);
+        // 1차 캐시에 저장된 데이터를 불러오기 때문에 조회 쿼리가 실행되지 않음
+        Member member2 = em.find(Member.class, 1L);
+
+        System.out.println("result : " + (member1 == member2)); // 동일성 비교 true
+
+        em.close();
+    }
+
+    @Test
+    public void test_transaction() {
+        
     }
 }

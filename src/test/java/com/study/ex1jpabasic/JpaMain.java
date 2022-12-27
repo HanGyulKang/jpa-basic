@@ -1,17 +1,20 @@
 package com.study.ex1jpabasic;
 
 import com.study.ex1jpabasic.hellojpa.Member;
+import com.study.ex1jpabasic.hellojpa.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -23,21 +26,24 @@ public class JpaMain {
     @Autowired
     EntityManager em;
 
+    @Autowired
+    MemberRepository memberRepository;
+
     private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     @BeforeEach
     public void before() {
-        Member member1 = Member.builder().id(11L).name("Hello 11").build();
-        Member member2 = Member.builder().id(12L).name("Hello 12").build();
-        Member member3 = Member.builder().id(13L).name("Hello 13").build();
-        Member member4 = Member.builder().id(14L).name("Hello 14").build();
-
-        em.persist(member1);
-        em.persist(member2);
-        em.persist(member3);
-        em.persist(member4);
-
-        em.flush();
+//        Member member1 = Member.builder().id(11L).name("Hello 11").build();
+//        Member member2 = Member.builder().id(12L).name("Hello 12").build();
+//        Member member3 = Member.builder().id(13L).name("Hello 13").build();
+//        Member member4 = Member.builder().id(14L).name("Hello 14").build();
+//
+//        em.persist(member1);
+//        em.persist(member2);
+//        em.persist(member3);
+//        em.persist(member4);
+//
+//        em.flush();
     }
 
     @Test
@@ -185,5 +191,34 @@ public class JpaMain {
 
         // 객체 동일함
         assertThat(member).isEqualTo(member1);
+    }
+
+    @Test
+    @Transactional
+//    @Commit
+    public void test2() {
+        Member member = Member
+                .builder()
+                .id(201L)
+                .name("number 201")
+                .build();
+
+        em.persist(member);
+
+        Member member1 = memberRepository.findById(201L).get();
+        System.out.println(member1.toString());
+
+        assertThat(member).isEqualTo(member1);
+
+        System.out.println("======== query s");
+        // database로 쓰기 지연 sql 저장소에 있는 쿼리를 날림
+        // commit 어노테이션을 주석해제하면 해당 로직이 다 돌고나서 transaction이 commit하는 시점에
+        // 쓰기 지연 sql 저장소에 있는 쿼리를 날리기 때문에 위 아래 sout을 벗어나서 쿼리가 로그에 찍힘
+        em.flush();
+        System.out.println("======== query e");
+
+        Member member2 = memberRepository.findById(201L).get();
+        assertThat(member).isEqualTo(member1);
+        assertThat(member).isEqualTo(member2);
     }
 }

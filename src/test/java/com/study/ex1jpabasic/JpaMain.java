@@ -221,4 +221,28 @@ public class JpaMain {
         assertThat(member).isEqualTo(member1);
         assertThat(member).isEqualTo(member2);
     }
+
+    @Test
+    public void jpabasic_10() {
+        /**
+         * 영속 상태를 준영속 상태로 바꾸기 때문에 select 쿼리만 두 번 나감
+         */
+
+        // 영속
+        Member member = em.find(Member.class, 201L);
+        member.setName("AAAA");
+
+        // 준영속 : 영속에서 떼버림 JPA에서 관리 안 함
+        em.detach(member);
+
+        // 준영속 : 엔티티 매니저 안의 영속성 컨텍스트(=1차 캐시)를 통째로 다 지움
+        em.clear();
+
+        // 준영속 : 엔티티 매니저를 닫아버림
+        em.close();
+
+        // 다시 영속
+        Member member1 = em.find(Member.class, 201L);
+        assertThat(member1).extracting("name").isEqualTo("number 201");
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Ex1JpaBasicApplication {
 
 	public static void main(String[] args) {
+                // 야근 ㅠㅠ
 		SpringApplication.run(Ex1JpaBasicApplication.class, args);
 	}
 

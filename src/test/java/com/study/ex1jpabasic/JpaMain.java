@@ -245,4 +245,17 @@ public class JpaMain {
         Member member1 = em.find(Member.class, 201L);
         assertThat(member1).extracting("name").isEqualTo("number 201");
     }
+
+    @Test
+    @Transactional
+    public void jpabasic_10_1() {
+        Member member = Member.builder().id(301L).name("number301").build();
+        em.persist(member);
+
+        // 조회 쿼리는 돌지 않음
+        // 위에서 영속을 했기 때문에 1차 캐시에 있는 데이터를 바로 가져옴
+        em.find(Member.class, 301L);
+        // 영속성 컨텍스트에 없는 데이터이기 때문에 조회 쿼리가 날아감
+        em.find(Member.class, 201L);
+    }
 }

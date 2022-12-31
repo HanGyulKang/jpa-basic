@@ -8,17 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
+@Transactional
 public class JpaMain {
 
     // **** JPA 의 모든 데이터 변경은 트랜잭션 안에서 실행해야 한다.
@@ -63,6 +62,7 @@ public class JpaMain {
     }
 
     @Test
+    @Transactional
     public void find() {
         // 영속성 획득
         Member member = em.find(Member.class, 12L);
@@ -199,13 +199,13 @@ public class JpaMain {
     public void test2() {
         Member member = Member
                 .builder()
-                .id(201L)
+                .id(202L)
                 .name("number 201")
                 .build();
 
         em.persist(member);
 
-        Member member1 = memberRepository.findById(201L).get();
+        Member member1 = memberRepository.findById(202L).get();
         System.out.println(member1.toString());
 
         assertThat(member).isEqualTo(member1);
@@ -217,7 +217,7 @@ public class JpaMain {
         em.flush();
         System.out.println("======== query e");
 
-        Member member2 = memberRepository.findById(201L).get();
+        Member member2 = memberRepository.findById(202L).get();
         assertThat(member).isEqualTo(member1);
         assertThat(member).isEqualTo(member2);
     }

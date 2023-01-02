@@ -2,6 +2,7 @@ package com.study.ex1jpabasic;
 
 import com.study.ex1jpabasic.hellojpa.Member;
 import com.study.ex1jpabasic.hellojpa.MemberRepository;
+import com.study.ex1jpabasic.hellojpa.RoleType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -32,17 +33,19 @@ public class JpaMain {
 
     @BeforeEach
     public void before() {
-//        Member member1 = Member.builder().id(11L).name("Hello 11").build();
-//        Member member2 = Member.builder().id(12L).name("Hello 12").build();
-//        Member member3 = Member.builder().id(13L).name("Hello 13").build();
-//        Member member4 = Member.builder().id(14L).name("Hello 14").build();
-//
-//        em.persist(member1);
-//        em.persist(member2);
-//        em.persist(member3);
-//        em.persist(member4);
-//
-//        em.flush();
+        Member member1 = Member.builder().id(11L).name("Hello 11").build();
+        Member member2 = Member.builder().id(12L).name("Hello 12").build();
+        Member member3 = Member.builder().id(13L).name("Hello 13").build();
+        Member member4 = Member.builder().id(14L).name("Hello 14").build();
+        Member member5 = Member.builder().id(201L).name("Hello 201").build();
+
+        em.persist(member1);
+        em.persist(member2);
+        em.persist(member3);
+        em.persist(member4);
+        em.persist(member5);
+
+        em.flush();
     }
 
     @Test
@@ -243,7 +246,7 @@ public class JpaMain {
 
         // 다시 영속
         Member member1 = em.find(Member.class, 201L);
-        assertThat(member1).extracting("name").isEqualTo("number 201");
+        assertThat(member1).extracting("name").isEqualTo("Hello 201");
     }
 
     @Test
@@ -257,5 +260,19 @@ public class JpaMain {
         em.find(Member.class, 301L);
         // 영속성 컨텍스트에 없는 데이터이기 때문에 조회 쿼리가 날아감
         em.find(Member.class, 201L);
+    }
+
+    @Test
+    @Transactional
+    public void jpabasic_enum() {
+        Member member = Member.builder()
+                .id(99L)
+                .name("99num")
+                .roleType(RoleType.USER)
+                .build();
+
+        em.persist(member);
+
+
     }
 }

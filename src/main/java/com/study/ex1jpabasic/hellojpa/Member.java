@@ -15,6 +15,7 @@ import java.util.Date;
 public class Member {
 
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // updatable : 업데이트 가능여부

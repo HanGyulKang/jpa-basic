@@ -23,6 +23,7 @@ public class OrderItem {
     private Long orderId;
     @Column(name = "item_id")
     private Long itemId;
+    @Column(name = "order_price")
     private Integer orderPrice;
     private Integer count;
 }

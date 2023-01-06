@@ -21,5 +21,6 @@ public class Item {
     private Long id;
     private String name;
     private Integer price;
+    @Column(name = "stock_quantity")
     private Integer stockQuantity;
 }

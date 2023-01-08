@@ -16,13 +16,18 @@ import java.time.LocalDateTime;
 public class Order {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
     @Column(name = "order_date")
     private LocalDateTime orderDate;
     @Enumerated(EnumType.STRING) // ORDINAL 쓰면 순서가 꼬이면 슬퍼짐
     private OrderStatus status;
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }

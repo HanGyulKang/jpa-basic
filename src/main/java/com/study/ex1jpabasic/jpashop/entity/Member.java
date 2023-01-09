@@ -23,5 +23,6 @@ public class Member {
     private String street;
     private String zipcode;
     @OneToMany(mappedBy = "member")
+    @ToString.Exclude
     private List<Order> orders = new ArrayList<>();
 }

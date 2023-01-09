@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -44,6 +45,7 @@ public class JpashopTest {
 
     @Test
     @Transactional
+    @Commit
     public void insertTest() {
         Member member = em.find(Member.class, 1L);
         System.out.println(member.toString());
@@ -60,6 +62,7 @@ public class JpashopTest {
                 .member(member)
                 .build();
 
+        em.persist(orderA);
         em.persist(orderB);
 
         // 1차 캐시에 가지고있는 데이터여서 따로 select 쿼리는 실행되지 않음
@@ -79,6 +82,12 @@ public class JpashopTest {
         System.out.println("order1 : " + order1.toString());
         assertThat(orderA).isEqualTo(order1);
 
-        System.out.println(member.getOrders().toString());
+        em.flush();
+        em.clear();
+
+        Member member1 = em.find(Member.class, 1L);
+        for(Order o : member1.getOrders()) {
+            System.out.println(o.toString());
+        }
     }
 }

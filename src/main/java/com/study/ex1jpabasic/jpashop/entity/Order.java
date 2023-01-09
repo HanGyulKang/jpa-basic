@@ -26,8 +26,4 @@ public class Order {
     private LocalDateTime orderDate;
     @Enumerated(EnumType.STRING) // ORDINAL 쓰면 순서가 꼬이면 슬퍼짐
     private OrderStatus status;
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
 }

@@ -3,7 +3,6 @@ package com.study.ex1jpabasic;
 import com.study.ex1jpabasic.jpashop.entity.Member;
 import com.study.ex1jpabasic.jpashop.entity.Order;
 import com.study.ex1jpabasic.jpashop.enums.OrderStatus;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -24,7 +21,7 @@ public class JpashopTest {
 
     @BeforeEach
     public void setting() {
-        Member member = Member
+        Member memberA = Member
                 .builder()
                 .name("memberA")
                 .street("streetA")
@@ -32,7 +29,16 @@ public class JpashopTest {
                 .city("seoul")
                 .build();
 
-        em.persist(member);
+        Member memberB = Member
+                .builder()
+                .name("memberB")
+                .street("streetB")
+                .zipcode("08651")
+                .city("busan")
+                .build();
+
+        em.persist(memberA);
+        em.persist(memberB);
     }
 
 
@@ -42,13 +48,19 @@ public class JpashopTest {
         Member member = em.find(Member.class, 1L);
         System.out.println(member.toString());
 
-        Order order = Order
+        Order orderA = Order
                 .builder()
                 .status(OrderStatus.ORDER)
                 .member(member)
                 .build();
 
-        em.persist(order);
+        Order orderB = Order
+                .builder()
+                .status(OrderStatus.ORDER)
+                .member(member)
+                .build();
+
+        em.persist(orderB);
 
         // 1차 캐시에 가지고있는 데이터여서 따로 select 쿼리는 실행되지 않음
         // 쿼리를 실행시키고싶으면
@@ -63,8 +75,10 @@ public class JpashopTest {
         System.out.println("order1.getMember() : " + order1.getMember());
         assertThat(order1.getMember()).isEqualTo(member);
 
-        System.out.println("order : " + order.toString());
+        System.out.println("order : " + orderA.toString());
         System.out.println("order1 : " + order1.toString());
-        assertThat(order).isEqualTo(order1);
+        assertThat(orderA).isEqualTo(order1);
+
+        System.out.println(member.getOrders().toString());
     }
 }

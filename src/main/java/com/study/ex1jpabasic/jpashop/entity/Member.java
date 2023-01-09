@@ -22,7 +22,7 @@ public class Member {
     private String city;
     private String street;
     private String zipcode;
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Order> orders = new ArrayList<>();
 }

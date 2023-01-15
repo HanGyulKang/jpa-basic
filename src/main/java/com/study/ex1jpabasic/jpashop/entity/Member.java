@@ -24,5 +24,6 @@ public class Member {
     private String zipcode;
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @ToString.Exclude
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 }

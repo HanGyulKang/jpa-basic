@@ -66,3 +66,16 @@ em.clear();
 
 2. __양방향 매핑 시 무한 루프를 조심하자__
    <br>예 : toString(), lombok, JSON 생성 라이브러리
+   <br>
+   <br>- toString()
+   <br>Member의 toString 시 연결된 Team도 toString으로 뱉는다.
+   <br>Team을 toString으로 출력 시 연결된 Member도 toString으로 뱉는다.
+   <br>Member <-> Team 무한루프에 걸린다.
+   <br>__JSON 생성 라이브러리도 동일__ 하다.
+   <br>
+   <br>Controller에서 Entity를 직접 반환하려고 하면 JSON 라이브러리가 데이터를 변환하면서 toString()과 같이 서로의 연결된 Entity를 계속 호출해서 박살난다...
+   <br>
+   <br>가장 중요한 것은
+   <br>__Controller에서 절대로 Entity를 반환하지 말아라.__
+   <br>__무조건 DTO로 변환해서 뱉어라.__
+   <br>(무한루프가 걸리던지, Entity를 변경하는 순간 API의 스펙이 바뀌어버린다.)

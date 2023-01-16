@@ -26,4 +26,10 @@ public class Order {
     private LocalDateTime orderDate;
     @Enumerated(EnumType.STRING) // ORDINAL 쓰면 순서가 꼬이면 슬퍼짐
     private OrderStatus status;
+
+    // 연관관계 편의 메서드(양방향 매핑 시 두 객체에 모두 값을 셋팅해주는 메서드)
+    public void changeMember(Member member) {
+        this.member = member;
+        member.getOrders().add(this);
+    }
 }

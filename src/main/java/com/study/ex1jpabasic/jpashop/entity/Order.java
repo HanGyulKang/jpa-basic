@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -28,8 +30,8 @@ public class Order {
     private OrderStatus status;
 
     // 연관관계 편의 메서드(양방향 매핑 시 두 객체에 모두 값을 셋팅해주는 메서드)
-    public void changeMember(Member member) {
-        this.member = member;
-        member.getOrders().add(this);
-    }
+//    public void changeMember(Member member) {
+//        this.member = member;
+//        member.getOrders().add(this);
+//    }
 }

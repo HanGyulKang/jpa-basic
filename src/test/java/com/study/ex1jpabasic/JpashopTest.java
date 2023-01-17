@@ -2,6 +2,7 @@ package com.study.ex1jpabasic;
 
 import com.study.ex1jpabasic.jpashop.entity.Member;
 import com.study.ex1jpabasic.jpashop.entity.Order;
+import com.study.ex1jpabasic.jpashop.entity.OrderItem;
 import com.study.ex1jpabasic.jpashop.enums.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -91,4 +91,32 @@ public class JpashopTest {
             System.out.println(o.toString());
         }
     }
+
+    @Test
+    @Transactional
+    void jpa_test() {
+        System.out.println("\n1 ========= sql 실행 안 함 : 1차 캐시 조회");
+        Member member = em.find(Member.class, 1L);
+        System.out.println("========= sql 실행 안 함");
+
+        Order order = Order.builder()
+                .status(OrderStatus.SENT)
+                .member(member)
+                .build();
+
+        em.persist(order);
+
+        System.out.println("\n2 ========= sql 실행 안 함 : 1차 캐시 조회");
+        System.out.println(order.toString());
+        System.out.println("========= sql 실행 안 함");
+
+        em.flush();
+        // 1차 캐시 비움
+        em.clear();
+
+        System.out.println("\n3 ========= sql 실행 : DB 조회");
+        Order order1 = em.find(Order.class, order.getId());
+        System.out.println(order1.toString());
+        System.out.println("========= sql 실행");
+    }
 }

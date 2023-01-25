@@ -36,4 +36,9 @@ public class Member {
     @Builder.Default
     // 객체를 초기화하는 이유는? NullPointerException 방지 및 JPA를 사용할 때는 보통 관례로 사용 함
     private List<Order> orders = new ArrayList<>();
+
+    // JpaBasic-21 일대다 관계에서 1이 연관관계의 주인이 된 상태의 예제
+//    @OneToMany
+//    @JoinColumn(name = "order_id")
+//    private List<Order> orders = new ArrayList<>();
 }

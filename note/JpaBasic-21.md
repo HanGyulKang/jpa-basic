@@ -58,10 +58,13 @@
 ----------------------------------------|---------------|
 | MEMBER_ID(PK)                          | LOCKER_ID(PK) |
 | __LOCKER_ID(FK, UNIQUE)__<br/>USERNAME | NAME          |
+
+* 다대일 단방향 매핑과 매우 흡사하다.
+* 양방향으로 만들고싶다면 Locker에 Member를 추가하면 된다.
    
 <br>
-   <br>
-   <br>
+<br>
+<br>
 ### 다대다(@ManyToMany)
 
 

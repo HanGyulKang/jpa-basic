@@ -46,4 +46,9 @@ public class Member {
 //    @OneToMany
 //    @JoinColumn(name = "order_id")
 //    private List<Order> orders = new ArrayList<>();
+
+    // 다대다 매핑
+    @ManyToMany
+    @JoinTable(name = "member_product")
+    private List<Product> products = new ArrayList<>();
 }

@@ -47,8 +47,13 @@ public class Member {
 //    @JoinColumn(name = "order_id")
 //    private List<Order> orders = new ArrayList<>();
 
-    // 다대다 매핑
-    @ManyToMany
-    @JoinTable(name = "member_product")
-    private List<Product> products = new ArrayList<>();
+    // 다대다 매핑 : 실무에서는 그냥 사용하지 않는 것을 권한다.
+//    @ManyToMany
+//    @JoinTable(name = "member_product")
+//    private List<Product> products = new ArrayList<>();
+
+    // 다대다 매핑을 꼭 사용해야 한다면...? 중간다리 테이블을 Entity로 격상시키는게 좋다.
+    // 격상시킨 테이블에 상세 정보를 모아두는 것으로 풀어낸다.
+    @OneToMany(mappedBy = "member")
+    private List<MemberProduct> memberProducts = new ArrayList<>();
 }

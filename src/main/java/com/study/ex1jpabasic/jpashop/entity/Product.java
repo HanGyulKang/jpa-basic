@@ -19,6 +19,9 @@ public class Product {
     private Long id;
     private String name;
 
-    @ManyToMany(mappedBy = "products")
-    List<Member> members = new ArrayList<>();
+//    @ManyToMany(mappedBy = "products")
+//    List<Member> members = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<MemberProduct> memberProducts = new ArrayList<>();
 }

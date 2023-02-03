@@ -18,13 +18,9 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long Id;
-
     private String name;
-
     private String city;
-
     private String street;
-
     private String zipcode;
 
     // 1:1 연관관계

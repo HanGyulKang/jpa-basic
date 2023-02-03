@@ -3,6 +3,8 @@ package com.study.ex1jpabasic.jpashop.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,4 +22,7 @@ public class Item {
     private Integer price;
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
+
+    @ManyToMany(mappedBy = "items")
+    private List<Category> categories = new ArrayList<>();
 }

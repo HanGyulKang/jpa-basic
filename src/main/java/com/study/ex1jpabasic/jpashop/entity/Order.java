@@ -26,6 +26,10 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne
+    @JoinColumn(name = "delevery_id")
+    private Delivery delivery;
+
     @Column(name = "order_date")
     private LocalDateTime orderDate;
 

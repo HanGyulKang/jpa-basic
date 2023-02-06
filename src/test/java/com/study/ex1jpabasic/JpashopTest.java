@@ -2,7 +2,7 @@ package com.study.ex1jpabasic;
 
 import com.study.ex1jpabasic.jpashop.entity.Member;
 import com.study.ex1jpabasic.jpashop.entity.Order;
-import com.study.ex1jpabasic.jpashop.entity.OrderItem;
+import com.study.ex1jpabasic.jpashop.entity.subEntity.Movie;
 import com.study.ex1jpabasic.jpashop.enums.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -118,5 +118,52 @@ public class JpashopTest {
         Order order1 = em.find(Order.class, order.getId());
         System.out.println(order1.toString());
         System.out.println("========= sql 실행");
+    }
+
+    @Test
+    @Transactional
+//    @Commit
+    void extendsEntity() {
+        String director = "director1";
+        String actor = "actor1";
+
+        // super type, sub type 둘 다 @Builder를 @SuperBuilder로 해줘야 sub type Entity에서
+        // 한 번에 super, sub 양 쪽에 데이터를 넣을 수 있다.
+        Movie movie = Movie.builder()
+                .director(director)
+                .actor(actor)
+                .price(10000)
+                .name("바람과함께 사라지다.")
+                .build();
+
+        em.persist(movie);
+
+        // JPA가 자동으로 조인 해서 데이터를 가져오는 것을 확인하기 위한 1차 캐시 삭제
+        // 1차 캐시 미삭제 시 1차 캐시에서 데이터를 바로 가져오기 때문에
+        // 아래에서 조회 쿼리가 나가지 않는다.
+        em.flush();
+        em.clear();
+
+        Movie findMovie = em.find(Movie.class, movie.getId());
+        /**
+         * 결과 ::
+         *    select
+         *         movie0_.item_id as item_id1_5_0_,
+         *         movie0_1_.name as name2_5_0_,
+         *         movie0_1_.price as price3_5_0_,
+         *         movie0_1_.stock_quantity as stock_qu4_5_0_,
+         *         movie0_.actor as actor1_9_0_,
+         *         movie0_.director as director2_9_0_
+         *     from
+         *         movie movie0_
+         *     inner join
+         *         item movie0_1_
+         *             on movie0_.item_id=movie0_1_.item_id
+         *     where
+         *         movie0_.item_id=?
+         */
+
+        assertThat(findMovie.getActor()).isEqualTo(actor);
+        assertThat(findMovie.getDirector()).isEqualTo(director);
     }
 }
